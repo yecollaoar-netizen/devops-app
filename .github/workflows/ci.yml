@@ -1,0 +1,21 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Descargar codigo
+        uses: actions/checkout@v4
+
+      - name: Levantar servicios
+        run: docker compose up -d --build
+
+      - name: Esperar arranque
+        run: sleep 5
+
+      - name: Probar health
+        run: curl -fs http://localhost/health | grep -q "OK"
